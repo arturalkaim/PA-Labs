@@ -1,4 +1,4 @@
-<project name="lab01" basedir="." default="main">
+<project name="labs" basedir="." default="main">
 
     <property name="src.dir"     value="src"/>
 
@@ -6,7 +6,11 @@
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="jar.dir"     value="${build.dir}/jar"/>
 
-    <property name="main-class"  value="pt.ist.ap.labs.App1"/>
+    <input
+	  message="Please enter lab number:"
+	  addproperty="labN"
+	  defaultvalue="2"/>
+    <property name="main-class"  value="pt.ist.ap.labs.App${labN}"/>
 
     <target name="clean">
         <delete dir="${build.dir}"/>
