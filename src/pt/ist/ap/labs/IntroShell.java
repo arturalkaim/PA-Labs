@@ -91,9 +91,10 @@ class IntroShell {
 				try{
 					int index = Integer.parseInt(args[1]);
 
-					commands.put("last",commands.get(args[1]));
-
 					c = (Class<?>) commands.get("last");
+					if(c.isArray()){
+						
+					}
 					System.out.println("class " + c.getCanonicalName());
 
 

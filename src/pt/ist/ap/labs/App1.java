@@ -4,12 +4,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Locale;
+import java.io.*;
 
 public class App1{
 
 	public static void main(String[] args) {
 		try{
-			Class<?> c = Class.forName("pt.ist.ap.labs.HelloWorld");
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+			String className = in.readLine();
+			Class<?> c = Class.forName(className);
  			Object t = c.newInstance();
  			System.out.println("Class: " +  c.getCanonicalName());
 			
@@ -35,6 +38,8 @@ public class App1{
 		} catch (InstantiationException x) {
 	    	x.printStackTrace();
 		} catch (IllegalAccessException x) {
+	    	x.printStackTrace();
+		} catch (IOException x) {
 	    	x.printStackTrace();
 		}
 

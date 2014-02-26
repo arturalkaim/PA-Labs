@@ -6,11 +6,8 @@
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="jar.dir"     value="${build.dir}/jar"/>
 
-    <input
-	  message="Please enter lab number:"
-	  addproperty="labN"
-	  defaultvalue="2"/>
-    <property name="main-class"  value="pt.ist.ap.labs.App${labN}"/>
+
+    <property name="main-class"  value="pt.ist.ap.labs.App1"/>
 
     <target name="clean">
         <delete dir="${build.dir}"/>
@@ -31,11 +28,19 @@
     </target>
 
     <target name="run" depends="jar">
-        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="false"/>
     </target>
-
+    <target name="run_class" depends="compile">
+        <java classname="${main-class}" fork="false">
+        <classpath>
+              <pathelement location="${jar.dir}/${ant.project.name}.jar"/>
+              <pathelement path="${build.dir}/classes"/>
+        </classpath>
+    	</java>
+    </target>
+	
     <target name="clean-build" depends="clean,jar"/>
 
-    <target name="main" depends="clean,run"/>
+    <target name="main" depends="clean,run_class"/>
 
 </project>
