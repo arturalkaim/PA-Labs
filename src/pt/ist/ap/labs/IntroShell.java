@@ -4,6 +4,7 @@ package pt.ist.ap.labs;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.io.*;
 
@@ -49,12 +50,15 @@ class IntroShell {
 				String args[] = cmd.split(" ");
 				try{
 					c = Class.forName(args[1]);
-		 			
+		 			Object aux = c.newInstance();
+		 			commands.put("last",aux);
 		 			System.out.println("Class: " +  c.getCanonicalName());
 					
 				} catch (ClassNotFoundException x) {
 			    	x.printStackTrace();
-				} 
+				} catch (Exception x) {
+			    	x.printStackTrace();
+				}
 				continue;				
 					
 			}
@@ -94,6 +98,14 @@ class IntroShell {
 					c = (Class<?>) commands.get("last");
 					if(c.isArray()){
 						
+						int size = Array.getLength(c);
+						if(size < index){
+							System.out.println("Index out of bounds!");
+						}
+						Object arrayElement = Array.get(c, index);
+						commands.put("last",arrayElement);
+						c = arrayElement.getClass();
+						
 					}
 					System.out.println("class " + c.getCanonicalName());
 
@@ -109,19 +121,35 @@ class IntroShell {
 				System.out.println("Trying generic command: " + cmd);
 
 				try{
+					Object last = commands.get("last");
+					c = last.getClass();
 					Method[] allMethods = c.getDeclaredMethods();
 
 					for (Method m : allMethods) {
 						String mname = m.getName();
+						System.out.println(mname);
 						if (mname.equalsIgnoreCase(args[0])) {
-
 							try {
 							    m.setAccessible(true);
-							    Object o = m.invoke(c);
-
+							    Object o = m.invoke(last);
+							    
 							    commands.put("result",o);
-
-								System.out.println(o);
+							    Class<?> cl = o.getClass();
+							    
+							    if(cl.isArray()){
+							    	System.out.println("É array!");
+							    	
+									int size = java.lang.reflect.Array.getLength(cl);
+									System.out.println("Array Size" + size);
+									for(int i=0; i<size;i++){
+										Method arrayElement = (Method) java.lang.reflect.Array.get(cl, i);
+										System.out.println(arrayElement.toString());
+									}
+																	
+								}else
+									System.out.println("Não é array pah!");
+							    
+								
 							// Handle any exceptions thrown by method to be invoked.
 							} catch (InvocationTargetException x) {
 							    Throwable cause = x.getCause();
@@ -142,4 +170,7 @@ class IntroShell {
 
 		}
 	}
+
+
+
 }
